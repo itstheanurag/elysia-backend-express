@@ -17,6 +17,18 @@ const envSchema = t.Object({
     { default: "development" }
   ),
 
+  // Database
+  DATABASE_URL: t.Optional(t.String()),
+
+  // JWT Authentication
+  JWT_SECRET: t.String({
+    default: "change-me-in-production-use-secure-random-string",
+  }),
+  JWT_EXPIRES_IN: t.String({ default: "7d" }),
+
+  // Redis
+  REDIS_URL: t.Optional(t.String()),
+
   // Logging
   LOG_LEVEL: t.Union(
     [
@@ -51,6 +63,10 @@ function parseEnv(): typeof envSchema.static {
     PORT: process.env.PORT ? parseInt(process.env.PORT, 10) : undefined,
     HOST: process.env.HOST,
     NODE_ENV: process.env.NODE_ENV,
+    DATABASE_URL: process.env.DATABASE_URL,
+    JWT_SECRET: process.env.JWT_SECRET,
+    JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN,
+    REDIS_URL: process.env.REDIS_URL,
     LOG_LEVEL: process.env.LOG_LEVEL,
     CORS_ORIGIN: process.env.CORS_ORIGIN,
     CORS_CREDENTIALS:

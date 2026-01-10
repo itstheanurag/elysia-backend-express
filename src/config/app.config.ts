@@ -3,49 +3,19 @@
  * Centralized configuration object built from environment variables
  */
 
+import { AppConfig } from ".";
 import { env } from "./env";
-
-export interface ServerConfig {
-  port: number;
-  host: string;
-  prefix: string;
-}
-
-export interface DocsConfig {
-  enabled: boolean;
-  provider: "scalar" | "swaggerui";
-  path: string;
-  title: string;
-  version: string;
-  description: string;
-}
-
-export interface CorsConfig {
-  origin: string | string[] | boolean;
-  credentials: boolean;
-  methods: string[];
-  allowedHeaders: string[];
-}
-
-export interface LoggerConfig {
-  level: "debug" | "info" | "warn" | "error";
-  enabled: boolean;
-}
-
-export interface AppConfig {
-  server: ServerConfig;
-  docs: DocsConfig;
-  cors: CorsConfig;
-  logger: LoggerConfig;
-  isDev: boolean;
-  isProd: boolean;
-}
 
 export const appConfig: AppConfig = {
   server: {
     port: env.PORT,
     host: env.HOST,
     prefix: env.API_PREFIX,
+  },
+
+  database: {
+    url: env.DATABASE_URL,
+    enabled: !!env.DATABASE_URL,
   },
 
   docs: {
@@ -55,6 +25,12 @@ export const appConfig: AppConfig = {
     title: "API Documentation",
     version: "1.0.0",
     description: "Elysia API powered by Bun",
+    tags: [
+      { name: "Health", description: "Health check endpoints" },
+      { name: "Authentication", description: "User authentication endpoints" },
+      { name: "Users", description: "User management endpoints" },
+      { name: "Examples", description: "Example endpoints" },
+    ],
   },
 
   cors: {

@@ -10,4 +10,5 @@ export type {
   DocsConfig,
   CorsConfig,
   LoggerConfig,
-} from "./app.config";
+  DatabaseConfig,
+} from "./config.type";
