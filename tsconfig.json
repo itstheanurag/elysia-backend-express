@@ -8,6 +8,7 @@
       "@/*": ["./src/*"],
       "@config/*": ["./src/config/*"],
       "@core/*": ["./src/core/*"],
+      "@db/*": ["./src/db/*"],
       "@plugins/*": ["./src/plugins/*"],
       "@modules/*": ["./src/modules/*"]
     },
