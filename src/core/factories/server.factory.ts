@@ -4,7 +4,7 @@
  */
 
 import { Elysia } from "elysia";
-import type { AppConfig } from "@config/app.config";
+import type { AppConfig } from "@config/index";
 import {
   corsPlugin,
   loggerPlugin,
@@ -12,7 +12,7 @@ import {
   healthPlugin,
 } from "@plugins/index";
 import { createDocs } from "./docs.factory";
-import { logger } from "./logger";
+import { logger } from "../logger";
 
 export interface ServerFactoryOptions {
   config: AppConfig;
@@ -74,8 +74,8 @@ export const createServer = (options: ServerFactoryOptions) => {
       .use(loggerPlugin(config.logger))
       .use(errorPlugin())
       .use(healthPlugin())
-      // Documentation
-      .use(createDocs(config.docs))
+    // Note: Documentation plugin should be added AFTER all routes are registered
+    // Use createDocs(config.docs) after mounting your modules
   );
 };
 
