@@ -1,12 +1,13 @@
 /**
  * Example Controller
- * HTTP routes for the example module
+ * Simplified CRUD routes for the example module with rate limiting
  */
 
 import { Elysia } from "elysia";
 import { ExampleModel } from "./model";
 import { ExampleService } from "./service";
 import { NotFoundException } from "@core/exceptions";
+import { testRateLimit } from "@plugins/rate-limit.plugin";
 
 export const exampleModule = new Elysia({
   name: "module-example",
@@ -15,31 +16,15 @@ export const exampleModule = new Elysia({
     tags: ["Examples"],
   },
 })
-  /**
-   * List examples with pagination
-   */
-  .get(
-    "",
-    async ({ query }) => {
-      return ExampleService.list(query);
-    },
-    {
-      query: ExampleModel.listQuery,
-      response: ExampleModel.listResponse,
-      detail: {
-        summary: "List examples",
-        description:
-          "Get a paginated list of example items with optional search",
-      },
-    }
-  )
+  // Apply standard API rate limit to all routes in this module
+  .use(testRateLimit)
 
   /**
    * Get single example by ID
    */
   .get(
     "/:id",
-    async ({ params, set }) => {
+    async ({ params }) => {
       const item = await ExampleService.getById(params.id);
 
       if (!item) {
@@ -87,11 +72,11 @@ export const exampleModule = new Elysia({
   )
 
   /**
-   * Update example
+   * Update example (PUT)
    */
-  .patch(
+  .put(
     "/:id",
-    async ({ params, body, set }) => {
+    async ({ params, body }) => {
       const item = await ExampleService.update(params.id, body);
 
       if (!item) {
@@ -121,7 +106,7 @@ export const exampleModule = new Elysia({
    */
   .delete(
     "/:id",
-    async ({ params, set }) => {
+    async ({ params }) => {
       const deleted = await ExampleService.delete(params.id);
 
       if (!deleted) {
