@@ -1,0 +1,44 @@
+# Docker
+.docker/
+
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+dist/
+build/
+
+# Drizzle migrations (optional - include if you want migrations in image)
+# drizzle/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentation (not needed in image)
+*.md
+!README.md
+
+# Lock files (we use bun.lock)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

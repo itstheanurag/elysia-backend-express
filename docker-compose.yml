@@ -1,0 +1,84 @@
+# Docker Compose for local development
+# Includes the Elysia backend, PostgreSQL database, and Redis
+
+services:
+  # Elysia Backend
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: elysia-backend
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+      - PORT=3000
+      - HOST=0.0.0.0
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/elysia
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=${JWT_SECRET:-change-me-in-production}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - CORS_ORIGIN=${CORS_ORIGIN:-*}
+      - DOCS_ENABLED=${DOCS_ENABLED:-true}
+      - API_PREFIX=${API_PREFIX:-/api/v1}
+    volumes:
+      - ./src:/app/src
+      - ./package.json:/app/package.json
+      - ./tsconfig.json:/app/tsconfig.json
+    command: bun run dev
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - elysia-network
+
+  # PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: elysia-postgres
+    ports:
+      - "${DB_PORT:-5433}:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=elysia
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - elysia-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: elysia-redis
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - elysia-network
+
+# Volumes & Networks
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  elysia-network:
+    driver: bridge
