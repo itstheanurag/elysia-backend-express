@@ -5,7 +5,7 @@
 
 import { Elysia } from "elysia";
 import cors from "@elysiajs/cors";
-import type { CorsConfig } from "@config/app.config";
+import type { CorsConfig } from "@config/index";
 
 export const corsPlugin = (config: CorsConfig) =>
   new Elysia({ name: "plugin-cors" }).use(

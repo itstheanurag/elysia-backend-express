@@ -6,7 +6,6 @@
  */
 
 import { Elysia } from "elysia";
-import { appConfig } from "@config/app.config";
 import { HttpException } from "@core/exceptions";
 
 export interface ErrorResponse {
@@ -37,8 +36,7 @@ export const errorPlugin = () =>
           response.details = error.details;
         }
 
-        // Include stack if explicitly requested or in dev mode
-        if (error.includeStack || appConfig.isDev) {
+        if (error.includeStack) {
           response.stack = error.stack;
         }
 
@@ -85,10 +83,8 @@ export const errorPlugin = () =>
         timestamp: new Date().toISOString(),
       };
 
-      // Include stack trace only in development
-      if (appConfig.isDev && stack) {
-        response.stack = stack;
-      }
+      // Note: Stack traces are logged server-side by the logger plugin.
+      // We don't include them in the JSON response by default to keep it clean.
 
       return response;
     }

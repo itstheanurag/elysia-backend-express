@@ -11,7 +11,7 @@
  */
 
 import { Elysia } from "elysia";
-import type { LoggerConfig } from "@config/app.config";
+import type { LoggerConfig } from "@config/index";
 import { httpLogger } from "@core/logger";
 
 // WeakMap to store request timing without polluting context
