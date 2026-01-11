@@ -10,8 +10,10 @@ import {
   loggerPlugin,
   errorPlugin,
   healthPlugin,
+  metricsPlugin,
+  requestIdPlugin,
+  bullBoardPlugin,
 } from "@plugins/index";
-import { createDocs } from "./docs.factory";
 import { logger } from "../logger";
 
 export interface ServerFactoryOptions {
@@ -70,10 +72,13 @@ export const createServer = (options: ServerFactoryOptions) => {
   return (
     new Elysia({ name })
       // Core plugins
+      .use(requestIdPlugin())
       .use(corsPlugin(config.cors))
+      .use(metricsPlugin(config.metrics))
       .use(loggerPlugin(config.logger))
       .use(errorPlugin())
       .use(healthPlugin())
+      .use(bullBoardPlugin(config.bullBoard))
     // Note: Documentation plugin should be added AFTER all routes are registered
     // Use createDocs(config.docs) after mounting your modules
   );
@@ -233,41 +238,4 @@ export const gracefulShutdown = <T extends { stop: () => unknown }>(
   });
 
   return app;
-};
-
-/**
- * Creates a module-scoped Elysia instance with a prefix
- * Use this for feature modules
- *
- * @example
- * ```ts
- * export const userModule = createModule({
- *   name: 'user',
- *   prefix: '/users'
- * })
- *   .get('/', () => [...])
- *   .post('/', () => [...]);
- * ```
- */
-export const createModule = (options: { name: string; prefix: string }) => {
-  return new Elysia({
-    name: `module-${options.name}`,
-    prefix: options.prefix,
-  });
-};
-
-/**
- * Creates a plugin-scoped Elysia instance
- * Use this for reusable plugins
- *
- * @example
- * ```ts
- * export const authPlugin = createPlugin('auth')
- *   .derive(({ headers }) => ({
- *     user: validateToken(headers.authorization)
- *   }));
- * ```
- */
-export const createPlugin = (name: string) => {
-  return new Elysia({ name: `plugin-${name}` });
 };
