@@ -29,6 +29,7 @@ export const appConfig: AppConfig = {
       { name: "Health", description: "Health check endpoints" },
       { name: "Authentication", description: "User authentication endpoints" },
       { name: "Users", description: "User management endpoints" },
+      { name: "Queues", description: "Job queue management endpoints" },
       { name: "Examples", description: "Example endpoints" },
     ],
   },
@@ -43,6 +44,19 @@ export const appConfig: AppConfig = {
   logger: {
     level: env.LOG_LEVEL,
     enabled: true,
+  },
+
+  queue: {
+    redisUrl: env.QUEUE_REDIS_URL || env.REDIS_URL,
+    concurrency: env.QUEUE_CONCURRENCY,
+    enabled: env.QUEUE_ENABLED && !!(env.QUEUE_REDIS_URL || env.REDIS_URL),
+  },
+
+  bullBoard: {
+    enabled: env.BULL_BOARD_ENABLED,
+    path: env.BULL_BOARD_PATH,
+    username: env.BULL_BOARD_USERNAME,
+    password: env.BULL_BOARD_PASSWORD,
   },
 
   isDev: env.NODE_ENV === "development",

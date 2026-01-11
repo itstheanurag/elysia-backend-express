@@ -55,6 +55,17 @@ const envSchema = t.Object({
 
   // API
   API_PREFIX: t.String({ default: "/api/v1", pattern: "^/" }),
+
+  // Queue Configuration
+  QUEUE_REDIS_URL: t.Optional(t.String()),
+  QUEUE_CONCURRENCY: t.Number({ default: 5, minimum: 1, maximum: 50 }),
+  QUEUE_ENABLED: t.Boolean({ default: true }),
+
+  // Bull Board (Queue Dashboard)
+  BULL_BOARD_ENABLED: t.Boolean({ default: true }),
+  BULL_BOARD_PATH: t.String({ default: "/admin/queues", pattern: "^/" }),
+  BULL_BOARD_USERNAME: t.Optional(t.String()),
+  BULL_BOARD_PASSWORD: t.Optional(t.String()),
 });
 
 function parseEnv(): typeof envSchema.static {
@@ -86,6 +97,27 @@ function parseEnv(): typeof envSchema.static {
     DOCS_PROVIDER: process.env.DOCS_PROVIDER,
     DOCS_PATH: process.env.DOCS_PATH,
     API_PREFIX: process.env.API_PREFIX,
+    // Queue
+    QUEUE_REDIS_URL: process.env.QUEUE_REDIS_URL,
+    QUEUE_CONCURRENCY: process.env.QUEUE_CONCURRENCY
+      ? parseInt(process.env.QUEUE_CONCURRENCY, 10)
+      : undefined,
+    QUEUE_ENABLED:
+      process.env.QUEUE_ENABLED === "true"
+        ? true
+        : process.env.QUEUE_ENABLED === "false"
+        ? false
+        : undefined,
+    // Bull Board
+    BULL_BOARD_ENABLED:
+      process.env.BULL_BOARD_ENABLED === "true"
+        ? true
+        : process.env.BULL_BOARD_ENABLED === "false"
+        ? false
+        : undefined,
+    BULL_BOARD_PATH: process.env.BULL_BOARD_PATH,
+    BULL_BOARD_USERNAME: process.env.BULL_BOARD_USERNAME,
+    BULL_BOARD_PASSWORD: process.env.BULL_BOARD_PASSWORD,
   };
 
   // Apply defaults
@@ -105,10 +137,6 @@ function parseEnv(): typeof envSchema.static {
 
   return withDefaults as typeof envSchema.static;
 }
-
-// ============================================================================
-// Export
-// ============================================================================
 
 export const env = parseEnv();
 export type Env = typeof env;
