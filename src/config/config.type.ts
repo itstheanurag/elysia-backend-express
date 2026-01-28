@@ -59,6 +59,5 @@ export interface AppConfig {
   logger: LoggerConfig;
   queue: QueueConfig;
   bullBoard: BullBoardConfig;
-  isDev: boolean;
   isProd: boolean;
 }

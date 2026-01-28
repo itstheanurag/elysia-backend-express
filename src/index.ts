@@ -17,7 +17,7 @@ import { disconnectRedis } from "@core/redis";
 const app = createServer({ config: appConfig })
   .use(createDocs(appConfig.docs))
   .group(appConfig.server.prefix, (app) =>
-    app.use(authModule).use(userModule).use(exampleModule).use(queueModule)
+    app.use(authModule).use(userModule).use(exampleModule).use(queueModule),
   )
   .get("/", () => ({
     name: "Elysia Backend",
@@ -65,9 +65,9 @@ logger.info(
     bullBoard: appConfig.bullBoard.enabled
       ? appConfig.bullBoard.path
       : "disabled",
-    env: appConfig.isDev ? "development" : "production",
+    env: appConfig.isProd ? "producation" : "development",
   },
-  "Elysia server started"
+  "Elysia server started",
 );
 
 export type App = typeof app;

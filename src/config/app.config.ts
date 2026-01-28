@@ -59,6 +59,5 @@ export const appConfig: AppConfig = {
     password: env.BULL_BOARD_PASSWORD,
   },
 
-  isDev: env.NODE_ENV === "development",
   isProd: env.NODE_ENV === "production",
 };
