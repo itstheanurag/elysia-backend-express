@@ -3,10 +3,10 @@
  * Business logic for user operations
  */
 
-import { UserRepository } from "./repository";
+import { UserRepository } from "../repositories";
 import { logEvent } from "@core/logger";
 import { NotFoundException } from "@core/exceptions";
-import type { ListQuery, UpdateBody } from "./dtos";
+import type { ListQuery, UpdateBody } from "../dtos";
 
 // Helper to format user for API response
 function formatUser(user: {

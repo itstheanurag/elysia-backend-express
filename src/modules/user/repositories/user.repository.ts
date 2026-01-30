@@ -5,7 +5,7 @@
 
 import { eq, like, or } from "drizzle-orm";
 import { BaseRepository } from "@db/index";
-import { users } from "./models";
+import { users } from "../models";
 import { NotFoundException } from "@core/exceptions";
 import type { Transaction } from "@db/base.repository";
 
@@ -34,7 +34,7 @@ class UserRepositoryClass extends BaseRepository<typeof users> {
   async search(query: string, options: { page?: number; limit?: number } = {}) {
     const whereClause = or(
       like(users.email, `%${query}%`),
-      like(users.name, `%${query}%`)
+      like(users.name, `%${query}%`),
     );
 
     return await this.findAll(options, whereClause);
@@ -45,7 +45,7 @@ class UserRepositoryClass extends BaseRepository<typeof users> {
    */
   async createWithPassword(
     data: { email: string; passwordHash: string; name?: string },
-    tx?: Transaction
+    tx?: Transaction,
   ) {
     return await this.create(
       {
@@ -53,7 +53,7 @@ class UserRepositoryClass extends BaseRepository<typeof users> {
         passwordHash: data.passwordHash,
         name: data.name,
       },
-      tx
+      tx,
     );
   }
 
