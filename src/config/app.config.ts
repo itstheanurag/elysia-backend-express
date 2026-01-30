@@ -30,7 +30,6 @@ export const appConfig: AppConfig = {
       { name: "Authentication", description: "User authentication endpoints" },
       { name: "Users", description: "User management endpoints" },
       { name: "Queues", description: "Job queue management endpoints" },
-      { name: "Examples", description: "Example endpoints" },
     ],
   },
 
