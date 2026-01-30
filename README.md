@@ -4,21 +4,22 @@ A production-ready, type-safe backend template built with Elysia and Bun runtime
 
 ## Tech Stack
 
-| Technology | Description |
-|------------|-------------|
-| [Bun](https://bun.sh) | Fast all-in-one JavaScript runtime |
-| [Elysia](https://elysiajs.com) | Ergonomic web framework for Bun |
-| [Drizzle ORM](https://orm.drizzle.team) | Headless TypeScript ORM (PostgreSQL) |
-| [Redis](https://redis.io) | In-memory data store for caching and rate limiting |
-| [Pino](https://getpino.io) | High-performance async logger |
-| [Scalar](https://scalar.com) | Modern OpenAPI documentation UI |
+| Technology                              | Description                                        |
+| --------------------------------------- | -------------------------------------------------- |
+| [Bun](https://bun.sh)                   | Fast all-in-one JavaScript runtime                 |
+| [Elysia](https://elysiajs.com)          | Ergonomic web framework for Bun                    |
+| [Drizzle ORM](https://orm.drizzle.team) | Headless TypeScript ORM (PostgreSQL)               |
+| [Redis](https://redis.io)               | In-memory data store for caching and rate limiting |
+| [Pino](https://getpino.io)              | High-performance async logger                      |
+| [Scalar](https://scalar.com)            | Modern OpenAPI documentation UI                    |
+| [OAuth 2.0](https://oauth.net/2/)       | Secure authentication with social providers        |
 
 ## Key Features
 
 - **Repository Pattern** - Clean separation of data access logic (UserRepository, PasswordResetTokenRepository).
 - **Distributed Rate Limiting** - Redis-backed rate limiting with global scoping and intelligent in-memory fallback.
 - **Docker Live Reloading** - Development workflow with volume mounting and `bun --watch` for instant container updates.
-- **Secure Auth** - JWT-based authentication with Argon2id hashing and password reset flow.
+- **Secure Auth** - JWT-based authentication with Argon2id hashing, password reset flow, and OAuth 2.0 support.
 - **OpenAPI Documentation** - Auto-generated docs at `/docs` (Scalar or Swagger UI) with full route discovery.
 - **Server Factory** - Composeable server architecture with built-in health checks (liveness/readiness).
 - **Structured Errors** - Consistent JSON error responses without stack trace clutter (logged server-side only).
@@ -96,15 +97,26 @@ Documentation is available at [/docs](http://localhost:3000/docs).
 
 ## Configuration
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `PORT` | `3000` | Server port |
-| `DATABASE_URL` | - | PostgreSQL Connection String |
-| `REDIS_URL` | - | Redis Connection String |
-| `JWT_SECRET` | - | Signing secret for tokens |
-| `LOG_LEVEL` | `info` | Log level (debug/info/warn/error) |
-| `DOCS_ENABLED` | `true` | Enable OpenAPI docs |
-| `API_PREFIX` | `/api/v1` | API route prefix |
+| Variable                 | Default                                      | Description                       |
+| ------------------------ | -------------------------------------------- | --------------------------------- |
+| `PORT`                   | `3000`                                       | Server port                       |
+| `DATABASE_URL`           | -                                            | PostgreSQL Connection String      |
+| `REDIS_URL`              | -                                            | Redis Connection String           |
+| `JWT_SECRET`             | -                                            | Signing secret for tokens         |
+| `LOG_LEVEL`              | `info`                                       | Log level (debug/info/warn/error) |
+| `DOCS_ENABLED`           | `true`                                       | Enable OpenAPI docs               |
+| `API_PREFIX`             | `/api/v1`                                    | API route prefix                  |
+| `GOOGLE_CLIENT_ID`       | -                                            | Google OAuth client ID            |
+| `GOOGLE_CLIENT_SECRET`   | -                                            | Google OAuth client secret        |
+| `GITHUB_CLIENT_ID`       | -                                            | GitHub OAuth client ID            |
+| `GITHUB_CLIENT_SECRET`   | -                                            | GitHub OAuth client secret        |
+| `FACEBOOK_CLIENT_ID`     | -                                            | Facebook OAuth client ID          |
+| `FACEBOOK_CLIENT_SECRET` | -                                            | Facebook OAuth client secret      |
+| `APPLE_CLIENT_ID`        | -                                            | Apple OAuth client ID             |
+| `APPLE_TEAM_ID`          | -                                            | Apple OAuth team ID               |
+| `APPLE_PRIVATE_KEY`      | -                                            | Apple OAuth private key           |
+| `OAUTH_REDIRECT_URL`     | `http://localhost:3000/api/v1/auth/callback` | OAuth redirect URL                |
+| `OAUTH_SCOPE`            | `email profile`                              | OAuth scope                       |
 
 ## Development Utilities
 
@@ -128,12 +140,12 @@ logger.info({ userId: "123" }, "User logged in");
 
 ## Scripts
 
-| Script | Description |
-|--------|-------------|
-| `bun run dev` | Start dev server with watch mode |
-| `bun run start` | Start production server |
-| `bun run typecheck` | Run TypeScript type checking |
-| `db:push` | Sync database schema with Drizzle |
+| Script              | Description                       |
+| ------------------- | --------------------------------- |
+| `bun run dev`       | Start dev server with watch mode  |
+| `bun run start`     | Start production server           |
+| `bun run typecheck` | Run TypeScript type checking      |
+| `db:push`           | Sync database schema with Drizzle |
 
 ## License
 

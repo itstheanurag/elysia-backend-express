@@ -57,7 +57,6 @@ export const createDocs = (options: DocsFactoryOptions) => {
           description: "User authentication endpoints",
         },
         { name: "Users", description: "User management endpoints" },
-        { name: "Examples", description: "Example endpoints" },
       ],
       servers: options.servers,
     },

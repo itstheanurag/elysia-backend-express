@@ -4,15 +4,15 @@
  */
 
 import { createLogger, logEvent } from "@core/logger";
-import { signJWT } from "./jwt";
-import { PasswordResetTokenRepository } from "./repository";
-import { UserRepository } from "@modules/user/repository";
+import { signJWT } from "../jwt";
+import { PasswordResetTokenRepository } from "../repositories";
+import { UserRepository } from "@modules/user/repositories";
 import type {
   SignupBody,
   LoginBody,
   ForgotPasswordBody,
   ResetPasswordBody,
-} from "./dtos";
+} from "../dtos";
 
 const logger = createLogger("auth-service");
 
@@ -92,31 +92,28 @@ export abstract class AuthService {
    * Generate password reset token
    */
   static async forgotPassword(data: ForgotPasswordBody) {
-    // Find user by email using repository
     const user = await UserRepository.findByEmail(data.email);
 
-    // Always return success to prevent email enumeration
     if (!user) {
       logger.debug(
         { email: data.email },
-        "Password reset for non-existent email"
+        "Password reset for non-existent email",
       );
       return { success: true };
     }
 
     // Create reset token using repository
     const resetToken = await PasswordResetTokenRepository.createForUser(
-      user.id
+      user.id,
     );
 
     // In production, send email with reset link
     logger.info(
       { userId: user.id, token: resetToken.token },
-      "Password reset token generated"
+      "Password reset token generated",
     );
 
     logEvent("auth.forgot_password", { userId: user.id });
-
     return { success: true, token: resetToken.token };
   }
 
@@ -124,16 +121,14 @@ export abstract class AuthService {
    * Reset password using token
    */
   static async resetPassword(data: ResetPasswordBody) {
-    // Find valid token using repository
     const tokenRecord = await PasswordResetTokenRepository.findValidToken(
-      data.token
+      data.token,
     );
 
     if (!tokenRecord) {
       return { error: "INVALID_TOKEN" as const };
     }
 
-    // Hash new password
     const passwordHash = await Bun.password.hash(data.password, {
       algorithm: "argon2id",
       memoryCost: 65536,
@@ -142,12 +137,9 @@ export abstract class AuthService {
 
     // Update password using repository
     await UserRepository.updatePassword(tokenRecord.userId, passwordHash);
-
-    // Mark token as used
     await PasswordResetTokenRepository.markAsUsed(tokenRecord.id);
 
     logEvent("auth.reset_password", { userId: tokenRecord.userId });
-
     return { success: true };
   }
 }

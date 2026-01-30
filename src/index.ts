@@ -6,7 +6,6 @@
 import { logger, createDocs } from "@core/index";
 import { createServer, gracefulShutdown } from "@core/server";
 import { appConfig } from "@config/app.config";
-import { exampleModule } from "@modules/example";
 import { authModule } from "@modules/auth";
 import { userModule } from "@modules/user";
 import { queueModule, startWorkers, disconnectQueues } from "@modules/queue";
@@ -17,7 +16,7 @@ import { disconnectRedis } from "@core/redis";
 const app = createServer({ config: appConfig })
   .use(createDocs(appConfig.docs))
   .group(appConfig.server.prefix, (app) =>
-    app.use(authModule).use(userModule).use(exampleModule).use(queueModule)
+    app.use(authModule).use(userModule).use(queueModule),
   )
   .get("/", () => ({
     name: "Elysia Backend",
@@ -67,7 +66,7 @@ logger.info(
       : "disabled",
     env: appConfig.isDev ? "development" : "production",
   },
-  "Elysia server started"
+  "Elysia server started",
 );
 
 export type App = typeof app;

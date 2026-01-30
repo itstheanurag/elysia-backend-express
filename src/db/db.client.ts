@@ -101,7 +101,7 @@ if (client) {
     if (status.connected) {
       logger.info(
         { latencyMs: status.latencyMs },
-        "Database connected successfully"
+        "Database connected successfully",
       );
     } else {
       logger.error({ error: status.error }, "Database connection failed");
