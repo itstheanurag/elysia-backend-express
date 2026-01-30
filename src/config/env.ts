@@ -24,6 +24,7 @@ const envSchema = t.Object({
   JWT_SECRET: t.String({
     default: "change-me-in-production-use-secure-random-string",
   }),
+
   JWT_EXPIRES_IN: t.String({ default: "7d" }),
 
   // OAuth 2.0 Configuration
@@ -31,8 +32,6 @@ const envSchema = t.Object({
   GOOGLE_CLIENT_SECRET: t.Optional(t.String()),
   GITHUB_CLIENT_ID: t.Optional(t.String()),
   GITHUB_CLIENT_SECRET: t.Optional(t.String()),
-  FACEBOOK_CLIENT_ID: t.Optional(t.String()),
-  FACEBOOK_CLIENT_SECRET: t.Optional(t.String()),
   APPLE_CLIENT_ID: t.Optional(t.String()),
   APPLE_TEAM_ID: t.Optional(t.String()),
   APPLE_PRIVATE_KEY: t.Optional(t.String()),
